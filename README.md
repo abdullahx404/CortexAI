@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CortexAI
 
-## Getting Started
+A web-based business memory and operations dashboard for SMEs. Upload your scattered business files — invoices, Excel sheets, customer records, supplier quotes, and meeting notes — and CortexAI turns them into a searchable dashboard with payment alerts, order tracking, supplier comparisons, and an AI-powered Q&A assistant.
 
-First, run the development server:
+## Live Demo
+
+Deploy to Vercel using the instructions below.
+
+## Features
+
+- **File Upload** — CSV, Excel, PDF, TXT, and invoice images (JPG/PNG via OCR)
+- **AI Data Extraction** — Gemini 1.5 Flash intelligently structures uploaded files into customers, orders, suppliers, and follow-ups
+- **Business Dashboard** — Summary cards: pending payments, overdue orders, active customers, today's follow-ups
+- **Customer Panel** — View all customers with dues, last order, and payment status
+- **Orders Panel** — Filter by pending/overdue/completed with visual overdue highlighting
+- **Supplier Comparison** — Price comparison per item with cheapest supplier highlighted
+- **Follow-up Center** — Auto-generated daily action list from overdue orders and pending payments
+- **Full-text Search** — Search across all tables simultaneously
+- **AI Chatbot** — Ask questions in plain English, answered from your own database only
+- **Demo Data** — One-click sample dataset for instant exploration
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | Next.js 15, React 19, TypeScript, Tailwind CSS |
+| UI Components | shadcn/ui, Lucide React |
+| Database | Supabase PostgreSQL |
+| Auth | Supabase Auth (email/password) |
+| File Storage | Supabase Storage |
+| OCR | Tesseract.js |
+| AI Structuring | Google Gemini 1.5 Flash |
+| AI Chatbot | Google Gemini 1.5 Flash |
+| Deployment | Vercel |
+
+## Setup
+
+### 1. Supabase Setup
+
+1. Create a free project at [supabase.com](https://supabase.com)
+2. Go to **SQL Editor** and run the contents of `supabase-schema.sql`
+3. Verify all 5 tables are created and RLS is enabled
+4. Go to **Settings → API** and copy your Project URL and anon key
+5. Go to **Authentication → Settings** → enable email/password, disable email confirmation (for easy demo)
+
+### 2. Gemini API Key
+
+1. Go to [aistudio.google.com](https://aistudio.google.com)
+2. Click **Get API Key** → Create API key (free, no credit card needed)
+3. Copy the key
+
+### 3. Local Development
 
 ```bash
+# Clone the repo
+git clone https://github.com/abdullahx404/CortexAI.git
+cd CortexAI
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your real Supabase URL, anon key, and Gemini API key
+
+# Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Open http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 4. Deploy to Vercel
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Push your code to GitHub
+2. Go to [vercel.com](https://vercel.com) → Add New Project → Import from GitHub
+3. Add these environment variables in Vercel project settings:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+GEMINI_API_KEY=your-gemini-key
+```
 
-## Learn More
+4. Deploy — Vercel auto-deploys on every push to `main`
 
-To learn more about Next.js, take a look at the following resources:
+## Environment Variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Variable | Required | Description |
+|---|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Yes | Your Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes | Supabase anon public key (safe for client with RLS) |
+| `GEMINI_API_KEY` | Yes | Google Gemini API key (server-side only) |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Demo Flow
 
-## Deploy on Vercel
+1. Sign up at `/auth/signup`
+2. Go to **Demo Data** → click "Load Demo Data"
+3. Go to **Dashboard** → see pending payments, overdue orders
+4. Go to **Customers** → see who owes money
+5. Go to **Suppliers** → see cheapest supplier for office chairs
+6. Go to **Follow-ups** → see daily action list
+7. Go to **Search** → search "Ahmed" to see all related records
+8. Go to **AI Assistant** → ask "Which customers owe us money?"
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+  app/           # Next.js pages and API routes
+  components/    # React components (UI + layout)
+  lib/           # Business logic (extraction, Gemini, Supabase, validation)
+  types/         # TypeScript types matching Supabase schema
+  middleware.ts  # Auth route protection
+supabase-schema.sql  # Full database schema with RLS
+```
+
+## Security
+
+- Gemini API key is server-side only — never exposed to the client
+- Supabase RLS restricts all data access to authenticated users
+- Uploaded files are processed in memory only — never written to disk
+- All API routes validate session and input before processing
