@@ -43,7 +43,7 @@ Deploy to Vercel using the instructions below.
 4. Go to **Settings → API** and copy your Project URL and anon key
 5. Go to **Authentication → Settings** → enable email/password, disable email confirmation (for easy demo)
 
-### 2. Gemini API Key
+### 2. Gemini/Grok API Key
 
 1. Go to [aistudio.google.com](https://aistudio.google.com)
 2. Click **Get API Key** → Create API key (free, no credit card needed)
