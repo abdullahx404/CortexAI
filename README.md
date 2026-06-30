@@ -37,7 +37,7 @@ Deploy to Vercel using the instructions below.
 
 ### 1. Supabase Setup
 
-1. Create a free project at [supabase.com](https://supabase.com)
+1. Create a free project at [supabase.com](https://supabase.com) or [Firebase.com]
 2. Go to **SQL Editor** and run the contents of `supabase-schema.sql`
 3. Verify all 5 tables are created and RLS is enabled
 4. Go to **Settings → API** and copy your Project URL and anon key
